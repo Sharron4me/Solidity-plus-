@@ -27,7 +27,10 @@ def gasless_send(file_name):
     except:
         pass
 
-def 
+def arithmetic_overflow(filename):
+
+    pass
+
 
 def reentrancy(file_name):
     try:

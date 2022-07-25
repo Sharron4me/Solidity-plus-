@@ -1,5 +1,6 @@
 import logging
-
+from csv import DictWriter
+import os
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 # logging.basicConfig(filename="newfile.log",
@@ -7,27 +8,82 @@ logger.setLevel(logging.DEBUG)
 #                     filemode='w')
 def use_of_tx_origin(file_name):
     try:
+        flag=0
         with open(file_name) as f:
+            line = 0
             for s in f:
+                line+=1
                 if "tx.origin" in s:
                     logger.warning("USE OF tx.origin , POSSIBLE VULNERABILITY")
+                    with open('report.csv', 'a') as f_object:
+                        # Pass the file object and a list
+                        # of column names to DictWriter()
+                        # You will get a object of DictWriter
+                        dictwriter_object = DictWriter(f_object, fieldnames=['filename', 'Bug comment'])
+
+                        # Pass the dictionary as an argument to the Writerow()
+                        dictwriter_object.writerow(
+                            {'filename': file_name, 'Bug comment': 'Use Of Tx.origin Bug in line : ' + str(line)})
+
+                        # Close the file object
+                        f_object.close()
+                        flag = 1
+        if flag:
+            return False
     except:
         pass
+    return True
 def use_of_timestamp(file_name):
+    flag=0
     with open(file_name) as f:
+        line=0
         for s in f:
+            line+=1
             if "block.timestamp" in s:
                 logger.warning("USE OF block.timestamp , POSSIBLE VULNERABILITY")
+                with open('report.csv', 'a') as f_object:
+                    # Pass the file object and a list
+                    # of column names to DictWriter()
+                    # You will get a object of DictWriter
+                    dictwriter_object = DictWriter(f_object, fieldnames=['filename', 'Bug comment'])
+
+                    # Pass the dictionary as an argument to the Writerow()
+                    dictwriter_object.writerow(
+                        {'filename': file_name, 'Bug comment': 'block.timestamp Bug in line : ' + str(line)})
+
+                    # Close the file object
+                    f_object.close()
+                flag=1
+    if flag:
+        return False
+    return True
 def gasless_send(file_name):
     try:
+        flag=0
         with open(file_name) as f:
+            line=0
             for s in f:
-                if ".send(" in s:
-                        logger.error("USE OF send , POSSIBLE VULNERABILITY")
+                line+=1
+                if ".send(" in s or "msg.sender.transfer(" in s:
+                    logger.error("Use Of send , POSSIBLE VULNERABILITY")
+                    with open('report.csv', 'a') as f_object:
+                        # Pass the file object and a list
+                        # of column names to DictWriter()
+                        # You will get a object of DictWriter
+                        dictwriter_object = DictWriter(f_object, fieldnames=['filename','Bug comment'])
+
+                        # Pass the dictionary as an argument to the Writerow()
+                        dictwriter_object.writerow({'filename':file_name,'Bug comment':'Use Of send Bug in line : '+str(line)})
+
+                        # Close the file object
+                        f_object.close()
+                    flag=1
+        if flag:
+           return False
     except:
         pass
-
-def arithmetic_overflow(filename):
+    return True
+def arithmetic_overflow(filename,path):
 
     pass
 
@@ -93,7 +149,18 @@ def reentrancy(file_name):
 
 
 def check_all(file_name):
-    use_of_tx_origin(file_name)
-    use_of_timestamp(file_name)
-    gasless_send(file_name)
-    reentrancy(file_name)
+    flag=0
+    if(not use_of_tx_origin(file_name)):
+        flag=1
+        print("Bug 1 File Name:",file_name)
+    if(not use_of_timestamp(file_name)):
+        flag = 1
+        print("Bug 2 File Name:", file_name)
+    if(not gasless_send(file_name)):
+        flag = 1
+        print("Bug 3 File Name:",file_name)
+    # if(not reentrancy(file_name)):
+    #     flag = 1
+    if(flag):
+        return False
+    return True

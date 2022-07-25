@@ -19,20 +19,16 @@ contract EIP20Interface {
     /// @param _owner The address from which the balance will be retrieved
     /// @return The balance
     function balanceOf(address _owner) public view returns (uint256 balance);
-function bug_intou7() public{
-    uint8 vundflw =0;
-    vundflw = vundflw -10;   // underflow bug
-}
+function bug_unchk_send19() payable public{
+      msg.sender.transfer(1 ether);}
 
     /// @notice send `_value` token to `_to` from `msg.sender`
     /// @param _to The address of the recipient
     /// @param _value The amount of token to be transferred
     /// @return Whether the transfer was successful or not
     function transfer(address _to, uint256 _value) public returns (bool success);
-function bug_intou23() public{
-    uint8 vundflw =0;
-    vundflw = vundflw -10;   // underflow bug
-}
+function bug_unchk_send26() payable public{
+      msg.sender.transfer(1 ether);}
 
     /// @notice send `_value` token to `_to` from `_from` on the condition it is approved by `_from`
     /// @param _from The address of the sender
@@ -40,72 +36,40 @@ function bug_intou23() public{
     /// @param _value The amount of token to be transferred
     /// @return Whether the transfer was successful or not
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
-mapping(address => uint) balances_intou14;
-
-function transfer_intou14(address _to, uint _value) public returns (bool) {
-    require(balances_intou14[msg.sender] - _value >= 0);  //bug
-    balances_intou14[msg.sender] -= _value;  //bug
-    balances_intou14[_to] += _value;  //bug
-    return true;
-  }
+function bug_unchk_send20() payable public{
+      msg.sender.transfer(1 ether);}
 
     /// @notice `msg.sender` approves `_spender` to spend `_value` tokens
     /// @param _spender The address of the account able to transfer the tokens
     /// @param _value The amount of tokens to be approved for transfer
     /// @return Whether the approval was successful or not
     function approve(address _spender, uint256 _value) public returns (bool success);
-mapping(address => uint) balances_intou30;
-
-function transfer_intou30(address _to, uint _value) public returns (bool) {
-    require(balances_intou30[msg.sender] - _value >= 0);  //bug
-    balances_intou30[msg.sender] -= _value;  //bug
-    balances_intou30[_to] += _value;  //bug
-    return true;
-  }
+function bug_unchk_send32() payable public{
+      msg.sender.transfer(1 ether);}
 
     /// @param _owner The address of the account owning tokens
     /// @param _spender The address of the account able to transfer the tokens
     /// @return Amount of remaining tokens allowed to spent
     function allowance(address _owner, address _spender) public view returns (uint256 remaining);
-function bug_intou8(uint8 p_intou8) public{
-    uint8 vundflw1=0;
-    vundflw1 = vundflw1 + p_intou8;   // overflow bug
-}
+function bug_unchk_send4() payable public{
+      msg.sender.transfer(1 ether);}
 
     // solhint-disable-next-line no-simple-event-func-name
-  function bug_intou31() public{
-    uint8 vundflw =0;
-    vundflw = vundflw -10;   // underflow bug
-}
+  function bug_unchk_send31() payable public{
+      msg.sender.transfer(1 ether);}
   event Transfer(address indexed _from, address indexed _to, uint256 _value);
-  mapping(address => uint) public lockTime_intou13;
-
-function increaseLockTime_intou13(uint _secondsToIncrease) public {
-        lockTime_intou13[msg.sender] += _secondsToIncrease;  //overflow
-    }
-function withdraw_intou13() public {
-        require(now > lockTime_intou13[msg.sender]);    
-        uint transferValue_intou13 = 10;           
-        msg.sender.transfer(transferValue_intou13);
-    }
+  function bug_unchk_send13() payable public{
+      msg.sender.transfer(1 ether);}
   event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 }
 
 contract HotDollarsToken is EIP20Interface {
     uint256 constant private MAX_UINT256 = 2**256 - 1;
-  mapping(address => uint) balances_intou26;
-
-function transfer_intou26(address _to, uint _value) public returns (bool) {
-    require(balances_intou26[msg.sender] - _value >= 0);  //bug
-    balances_intou26[msg.sender] -= _value;  //bug
-    balances_intou26[_to] += _value;  //bug
-    return true;
-  }
+  function bug_unchk_send2() payable public{
+      msg.sender.transfer(1 ether);}
   mapping (address => uint256) public balances;
-  function bug_intou20(uint8 p_intou20) public{
-    uint8 vundflw1=0;
-    vundflw1 = vundflw1 + p_intou20;   // overflow bug
-}
+  function bug_unchk_send17() payable public{
+      msg.sender.transfer(1 ether);}
   mapping (address => mapping (address => uint256)) public allowed;
     /*
     NOTE:
@@ -113,24 +77,14 @@ function transfer_intou26(address _to, uint _value) public returns (bool) {
     They allow one to customise the token contract & in no way influences the core functionality.
     Some wallets/interfaces might not even bother to look at this information.
     */
-  function bug_intou32(uint8 p_intou32) public{
-    uint8 vundflw1=0;
-    vundflw1 = vundflw1 + p_intou32;   // overflow bug
-}
+  function bug_unchk_send3() payable public{
+      msg.sender.transfer(1 ether);}
   string public name;                   //fancy name: eg Simon Bucks
-  mapping(address => uint) balances_intou38;
-
-function transfer_intou38(address _to, uint _value) public returns (bool) {
-    require(balances_intou38[msg.sender] - _value >= 0);  //bug
-    balances_intou38[msg.sender] -= _value;  //bug
-    balances_intou38[_to] += _value;  //bug
-    return true;
-  }
+  function bug_unchk_send9() payable public{
+      msg.sender.transfer(1 ether);}
   uint8 public decimals;                //How many decimals to show.
-  function bug_intou4(uint8 p_intou4) public{
-    uint8 vundflw1=0;
-    vundflw1 = vundflw1 + p_intou4;   // overflow bug
-}
+  function bug_unchk_send25() payable public{
+      msg.sender.transfer(1 ether);}
   string public symbol;                 //An identifier: eg SBX
 
     constructor() public {
@@ -140,10 +94,8 @@ function transfer_intou38(address _to, uint _value) public returns (bool) {
         symbol = "HDS";
         balances[msg.sender] = totalSupply; 
     }
-function bug_intou39() public{
-    uint8 vundflw =0;
-    vundflw = vundflw -10;   // underflow bug
-}
+function bug_unchk_send7() payable public{
+      msg.sender.transfer(1 ether);}
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balances[msg.sender] >= _value);
@@ -152,10 +104,8 @@ function bug_intou39() public{
         emit Transfer(msg.sender, _to, _value); //solhint-disable-line indent, no-unused-vars
         return true;
     }
-function bug_intou36(uint8 p_intou36) public{
-    uint8 vundflw1=0;
-    vundflw1 = vundflw1 + p_intou36;   // overflow bug
-}
+function bug_unchk_send23() payable public{
+      msg.sender.transfer(1 ether);}
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         uint256 allowance = allowed[_from][msg.sender];
@@ -168,40 +118,26 @@ function bug_intou36(uint8 p_intou36) public{
         emit Transfer(_from, _to, _value); //solhint-disable-line indent, no-unused-vars
         return true;
     }
-function bug_intou35() public{
-    uint8 vundflw =0;
-    vundflw = vundflw -10;   // underflow bug
-}
+function bug_unchk_send14() payable public{
+      msg.sender.transfer(1 ether);}
 
     function balanceOf(address _owner) public view returns (uint256 balance) {
         return balances[_owner];
     }
-function bug_intou40(uint8 p_intou40) public{
-    uint8 vundflw1=0;
-    vundflw1 = vundflw1 + p_intou40;   // overflow bug
-}
+function bug_unchk_send30() payable public{
+      msg.sender.transfer(1 ether);}
 
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowed[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value); //solhint-disable-line indent, no-unused-vars
         return true;
     }
-mapping(address => uint) public lockTime_intou33;
-
-function increaseLockTime_intou33(uint _secondsToIncrease) public {
-        lockTime_intou33[msg.sender] += _secondsToIncrease;  //overflow
-    }
-function withdraw_intou33() public {
-        require(now > lockTime_intou33[msg.sender]);    
-        uint transferValue_intou33 = 10;           
-        msg.sender.transfer(transferValue_intou33);
-    }
+function bug_unchk_send8() payable public{
+      msg.sender.transfer(1 ether);}
 
     function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
         return allowed[_owner][_spender];
     }
-function bug_intou27() public{
-    uint8 vundflw =0;
-    vundflw = vundflw -10;   // underflow bug
-}
+function bug_unchk_send27() payable public{
+      msg.sender.transfer(1 ether);}
 }

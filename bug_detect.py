@@ -57,6 +57,66 @@ def use_of_timestamp(file_name):
     if flag:
         return False
     return True
+def check_suicidal_contract(file_name):
+    try:
+        flag = 0
+        pattern1 = re.compile(r"(suicide)\s*\([a-zA-Z0-9_:\[\]=, ]*\)")
+        pattern2 = re.compile(r"(selfdestruct)\s*\([a-zA-Z0-9_:\[\]=, ]*\)")
+        with open(file_name) as f:
+            line = 0
+            for s in f:
+                line += 1
+                if re.search(pattern1, s) or re.search(pattern2, s):
+                    logger.warning("USE OF selfdestruct , POSSIBLE VULNERABILITY")
+                    with open('report.csv', 'a') as f_object:
+                        # Pass the file object and a list
+                        # of column names to DictWriter()
+                        # You will get a object of DictWriter
+                        dictwriter_object = DictWriter(f_object, fieldnames=['filename', 'Bug comment'])
+                        # Pass the dictionary as an argument to the Writerow()
+                        dictwriter_object.writerow(
+                            {'filename': file_name, 'Bug comment': 'Use Of self_destruct : ' + str(line)})
+                        # Close the file object
+                        f_object.close()
+                        flag = 1
+        if flag:
+            return False
+    except:
+        pass
+    return True
+def suicidal_contract(file_name):
+    if(check_suicidal_contract(file_name)):
+        return
+    output=[]
+    pattern_contract = re.compile(r"(contract\s+[a-zA-Z0-9_:\[\]=, \.]*\{)")
+    pattern_function = re.compile(r"(function\s+[\(\)a-zA-Z0-9_:\[\]=, \.]*\{)")
+    pattern_suicide = re.compile(r"(suicide)\s*\(([a-zA-Z0-9_:\[\]=, ]*)\)")
+    pattern_suicide2 = re.compile(r"(selfdestruct)\s*\(([a-zA-Z0-9_:\[\]=, ]*)\)")
+    with open(file_name) as f:
+        for line in f:
+            text = line
+            if re.search(pattern_contract, line):
+                text = re.sub(pattern_contract, r'\1' + '\n' + 'uint isdeleted=0;' + '\n', line)
+            elif re.search(pattern_function,line):
+                text = re.sub(pattern_function, r'\1' + '\n' + 'require(isdeleted==0,"Contract No longer available");' + '\n',line)
+            elif re.search(pattern_suicide , line) :
+                match = re.search(pattern_suicide , line)
+                addr = match[2].strip() + '.transfer(address(this).balance);' + '\n' + 'isdeleted=1'
+                text=re.sub(pattern_suicide , addr , line )
+            elif re.search(pattern_suicide2 , line):
+                match = re.search(pattern_suicide2 , line)
+                addr = match[2].strip() + '.transfer(address(this).balance);' + '\n' + 'isdeleted=1'
+                text=re.sub(pattern_suicide2 , addr , line )
+
+            output.append(text)
+
+
+
+    # print("hi")
+    # print(output)
+    file1 = open("solidified_" + file_name[3:], 'w')
+    file1.writelines(output)
+    file1.close()
 def gasless_send(file_name):
     try:
         flag=0
@@ -159,6 +219,9 @@ def check_all(file_name):
     if(not gasless_send(file_name)):
         flag = 1
         print("Bug 3 File Name:",file_name)
+    if (not suicidal_contract(file_name)):
+        flag = 1
+        print("Bug 4 file Name:", file_name)
     # if(not reentrancy(file_name)):
     #     flag = 1
     if(flag):
